@@ -799,7 +799,7 @@ tbody td { padding: 8px 13px; font-size: 12px; color: var(--text); white-space: 
     <div class="kpi-card blue"><div class="kpi-val" id="pa-kpi-total">—</div><div class="kpi-label">Total PA Obligated (2000+)</div></div>
     <div class="kpi-card sky"><div class="kpi-val" id="pa-kpi-projects">—</div><div class="kpi-label">Total Projects</div></div>
     <div class="kpi-card teal"><div class="kpi-val" id="pa-kpi-disasters">—</div><div class="kpi-label">Disasters with PA</div></div>
-    <div class="kpi-card gold"><div class="kpi-val" id="pa-kpi-avg">—</div><div class="kpi-label">Largest Project</div></div>
+    <div class="kpi-card gold"><div class="kpi-val" id="pa-kpi-avg">—</div><div class="kpi-label">Avg PA per Disaster</div></div>
     <div class="kpi-card green"><div class="kpi-val" id="pa-kpi-top-state">—</div><div class="kpi-label">Top State by PA $</div></div>
     <div class="kpi-card orange"><div class="kpi-val" id="pa-kpi-top-cat">—</div><div class="kpi-label">Top Damage Category</div></div>
   </div>
@@ -2192,85 +2192,95 @@ async function loadPaNational() {
   const kpiEls = ['pa-kpi-total','pa-kpi-projects','pa-kpi-disasters','pa-kpi-avg','pa-kpi-top-state','pa-kpi-top-cat'];
   kpiEls.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = 'Loading...'; });
 
-  // Use pre-built national summary from data.js if available
-  if (PA_NATIONAL && PA_NATIONAL.totalObligated) {
-    const p = PA_NATIONAL;
-    document.getElementById('pa-kpi-total').textContent     = fmtDollar(p.totalObligated);
-    document.getElementById('pa-kpi-projects').textContent  = p.totalProjects.toLocaleString();
-    document.getElementById('pa-kpi-disasters').textContent = p.totalDisasters.toLocaleString();
-    document.getElementById('pa-kpi-avg').textContent       = fmtDollar(p.largestProject);
-    document.getElementById('pa-kpi-top-state').textContent = p.topState || '—';
-    document.getElementById('pa-kpi-top-cat').textContent   = (p.topCategory||'—').replace(' / Other','').replace(', and Other Items','');
+  try {
+    // Simple query — no filter, top 1000 ordered by obligated descending
+    const url = PA_API + '?$top=1000&$select=stateAbbreviation,federalShareObligated,totalObligated,damageCategoryCode,damageCategoryDescrip,disasterNumber&$orderby=federalShareObligated%20desc';
+    console.log('PA national fetch URL:', url);
+    const resp = await fetch(url);
+    console.log('PA national response status:', resp.status);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status + ': ' + await resp.text());
+    const json = await resp.json();
+    const records = json.PublicAssistanceFundedProjectsDetails || [];
+    console.log('PA national records:', records.length);
+
+    if (!records.length) {
+      kpiEls.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '—'; });
+      return;
+    }
+
+    // Aggregate by state
+    const byState = {};
+    const byCat   = {};
+    let totalObl = 0, totalProj = 0;
+    const disasters = new Set();
+
+    records.forEach(r => {
+      const st  = r.stateAbbreviation || 'Unknown';
+      const obl = parseFloat(r.federalShareObligated) || 0;
+      const tot = parseFloat(r.totalObligated) || 0;
+      const np  = 1;
+      const cat = r.damageCategoryDescrip || DCC_LABELS[r.damageCategoryCode] || r.damageCategoryCode || 'Unknown';
+
+      byState[st] = byState[st] || {obl:0, tot:0, proj:0};
+      byState[st].obl  += obl;
+      byState[st].tot  += tot;
+      byState[st].proj += np;
+
+      byCat[cat] = byCat[cat] || {obl:0, proj:0};
+      byCat[cat].obl  += obl;
+      byCat[cat].proj += np;
+
+      totalObl  += obl;
+      totalProj += np;
+      if (r.disasterNumber) disasters.add(r.disasterNumber);
+    });
+
+    const topState  = Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl)[0];
+    const topCat    = Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl)[0];
+    const avgPerDis = disasters.size ? totalObl / disasters.size : 0;
+
+    document.getElementById('pa-kpi-total').textContent     = fmtDollar(totalObl);
+    document.getElementById('pa-kpi-projects').textContent  = totalProj.toLocaleString();
+    document.getElementById('pa-kpi-disasters').textContent = disasters.size.toLocaleString();
+    document.getElementById('pa-kpi-avg').textContent       = fmtDollar(avgPerDis);
+    document.getElementById('pa-kpi-top-state').textContent = topState ? topState[0] : '—';
+    document.getElementById('pa-kpi-top-cat').textContent   = topCat ? topCat[0].replace(' / Other','') : '—';
 
     // States chart
-    const top15 = (p.topStates || []).slice(0,15);
+    const statesSorted = Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl).slice(0,15);
     chartRegistry['pa-states-chart'] && chartRegistry['pa-states-chart'].destroy();
     chartRegistry['pa-states-chart'] = new Chart(document.getElementById('pa-states-chart'), {
       type: 'bar',
-      data: { labels: top15.map(s=>s.state),
-        datasets: [{ label:'Federal Share', data:top15.map(s=>s.obl), backgroundColor:PAL, borderRadius:3 }] },
+      data: {
+        labels: statesSorted.map(s=>s[0]),
+        datasets: [{ label:'Federal Share Obligated', data: statesSorted.map(s=>s[1].obl),
+          backgroundColor: PAL, borderRadius: 3 }]
+      },
       options: { responsive:true, plugins:{legend:{display:false}},
-        scales:{ x:{grid:{display:false}}, y:{grid:GRID, beginAtZero:true,
-          ticks:{callback:v=>'$'+Math.round(v/1e9).toFixed(1)+'B'}} } }
+        scales:{ x:{grid:{display:false}},
+          y:{grid:GRID, beginAtZero:true, ticks:{callback: v => '$'+Math.round(v/1e6)+'M'}} } }
     });
 
-    // Categories chart
-    const cats = (p.topCategories || []).slice(0,8);
+    // Category chart
+    const catSorted = Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl).slice(0,8);
     chartRegistry['pa-cat-chart'] && chartRegistry['pa-cat-chart'].destroy();
     chartRegistry['pa-cat-chart'] = new Chart(document.getElementById('pa-cat-chart'), {
       type: 'bar',
-      data: { labels: cats.map(c=>c.cat.replace(', and Other Items','').replace(/ \/ Other/,'')),
-        datasets: [{ label:'Federal Share', data:cats.map(c=>c.obl), backgroundColor:PAL.map(c=>c+'cc'), borderRadius:3 }] },
+      data: {
+        labels: catSorted.map(c=>c[0].replace(' / Other','')),
+        datasets: [{ label:'Federal Share Obligated', data: catSorted.map(c=>c[1].obl),
+          backgroundColor: PAL.map(c=>c+'cc'), borderRadius: 3 }]
+      },
       options: { indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
-        scales:{ x:{grid:GRID, ticks:{callback:v=>'$'+Math.round(v/1e9).toFixed(1)+'B'}}, y:{grid:{display:false}} } }
+        scales:{ x:{grid:GRID, ticks:{callback:v=>'$'+Math.round(v/1e6)+'M'}},
+          y:{grid:{display:false}} } }
     });
-    return;
-  }
 
-  // Fallback: fetch top 1000 from live API if PA_NATIONAL not available
-  try {
-    const url = PA_API + '?$top=1000&$select=stateAbbreviation,federalShareObligated,totalObligated,damageCategoryCode,damageCategoryDescrip,disasterNumber&$orderby=federalShareObligated%20desc';
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const json = await resp.json();
-    const records = json.PublicAssistanceFundedProjectsDetails || [];
-    if (!records.length) { kpiEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';}); return; }
-
-    const byState={}, byCat={};
-    let totalObl=0, totalProj=0;
-    const disasters=new Set();
-    records.forEach(r=>{
-      const st=r.stateAbbreviation||'Unknown';
-      const obl=parseFloat(r.federalShareObligated)||0;
-      const cat=r.damageCategoryDescrip||DCC_LABELS[r.damageCategoryCode]||'Unknown';
-      byState[st]=byState[st]||{obl:0,proj:0}; byState[st].obl+=obl; byState[st].proj+=1;
-      byCat[cat]=byCat[cat]||{obl:0}; byCat[cat].obl+=obl;
-      totalObl+=obl; totalProj+=1;
-      if(r.disasterNumber) disasters.add(r.disasterNumber);
-    });
-    const largest=Math.max(...records.map(r=>parseFloat(r.federalShareObligated)||0));
-    const topState=Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl)[0];
-    const topCat=Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl)[0];
-
-    document.getElementById('pa-kpi-total').textContent     = fmtDollar(totalObl)+' (sample)';
-    document.getElementById('pa-kpi-projects').textContent  = totalProj.toLocaleString()+'+';
-    document.getElementById('pa-kpi-disasters').textContent = disasters.size.toLocaleString()+'+';
-    document.getElementById('pa-kpi-avg').textContent       = fmtDollar(largest);
-    document.getElementById('pa-kpi-top-state').textContent = topState?topState[0]:'—';
-    document.getElementById('pa-kpi-top-cat').textContent   = topCat?topCat[0].replace(', and Other Items',''):'—';
-
-    const statesSorted=Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl).slice(0,15);
-    chartRegistry['pa-states-chart']&&chartRegistry['pa-states-chart'].destroy();
-    chartRegistry['pa-states-chart']=new Chart(document.getElementById('pa-states-chart'),{type:'bar',data:{labels:statesSorted.map(s=>s[0]),datasets:[{label:'Federal Share',data:statesSorted.map(s=>s[1].obl),backgroundColor:PAL,borderRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true,ticks:{callback:v=>'$'+Math.round(v/1e6)+'M'}}}}});
-    const catSorted=Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl).slice(0,8);
-    chartRegistry['pa-cat-chart']&&chartRegistry['pa-cat-chart'].destroy();
-    chartRegistry['pa-cat-chart']=new Chart(document.getElementById('pa-cat-chart'),{type:'bar',data:{labels:catSorted.map(c=>c[0].replace(', and Other Items','')),datasets:[{label:'Federal Share',data:catSorted.map(c=>c[1].obl),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:GRID,ticks:{callback:v=>'$'+Math.round(v/1e6)+'M'}},y:{grid:{display:false}}}}});
   } catch(e) {
     console.error('PA national load error:', e);
-    kpiEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='Error';});
+    kpiEls.forEach(id => { const el=document.getElementById(id); if(el) el.textContent='Error'; });
   }
 }
-
 
 async function selectPaState(code) {
   paState = code;
