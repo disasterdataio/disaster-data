@@ -915,41 +915,65 @@ tbody td { padding: 8px 13px; font-size: 12px; color: var(--text); white-space: 
 
 <div id="page-about" class="page">
   <div class="about-grid">
+
     <div class="about-card">
-      <h3>About This Dataset</h3>
-      <p>This explorer contains FEMA disaster declaration and denial data sourced from the <strong>FEMA OpenFEMA API</strong>, covering all records from 2000 through 2025.</p>
-      <p>The dataset includes <strong>50,068 declaration records</strong> and <strong>348 denial records</strong> maintained and published by the Federal Emergency Management Agency.</p>
+      <h3>About This Site</h3>
+      <p><strong>FEMA Disaster Data Explorer (BETA)</strong> is an independent, open-access tool for exploring federal disaster declaration and Public Assistance funding data sourced directly from the <strong>FEMA OpenFEMA API</strong>. It is not affiliated with FEMA, the federal government, or any other organization.</p>
+      <p>Data covers fiscal years 2000–2026 and refreshes automatically every Sunday from the live FEMA API. The site is a personal project and is provided as-is for informational purposes only.</p>
       <p><a href="https://www.fema.gov/about/openfema/data-sets" target="_blank">→ FEMA OpenFEMA Data Sets</a></p>
     </div>
+
     <div class="about-card">
-      <h3>Data Fields</h3>
+      <h3>Declaration Types Explained</h3>
+      <p>FEMA issues three types of federal disaster declarations:</p>
       <ul>
-        <li><strong>Declaration Type:</strong> DR (Major Disaster), EM (Emergency), FM (Fire Management)</li>
-        <li><strong>Processing Time:</strong> Incident Begin Date → Declaration Date for approvals; Request Date → Status Date for denials. Records with negative values excluded.</li>
-        <li><strong>Region:</strong> FEMA's 10 administrative regions</li>
-        <li><strong>Denial Rate:</strong> Denials ÷ Total Requests (Declarations + Denials) × 100</li>
+        <li><strong>DR — Major Disaster Declaration:</strong> The most common type. Triggered by severe events (hurricanes, floods, winter storms, etc.) that overwhelm state and local resources. Unlocks the full suite of FEMA assistance programs including Public Assistance (PA), Individual Assistance (IA), and Hazard Mitigation.</li>
+        <li><strong>EM — Emergency Declaration:</strong> A shorter-term declaration for events requiring immediate federal coordination. Narrower in scope than a DR — typically activates only emergency protective measures rather than full recovery programs.</li>
+        <li><strong>FM — Fire Management Assistance Grant (FMAG):</strong> Issued for uncontrolled wildfires that threaten to become major disasters. Funds fire suppression costs for state and local agencies. <strong>FM declarations do not qualify for Public Assistance or Individual Assistance</strong> — they are a separate grant program. This is why the total disaster count (3,404) is higher than the number of PA-funded disasters (1,707).</li>
       </ul>
     </div>
+
     <div class="about-card">
-      <h3>Key Findings</h3>
+      <h3>Public Assistance (PA) Program</h3>
+      <p>Public Assistance provides supplemental federal grant funding to state, local, tribal, and territorial governments, and certain private nonprofit organizations, to help communities respond to and recover from declared disasters.</p>
+      <p>PA funds six categories of work:</p>
       <ul>
-        <li>Overall denial rate: <strong>0.69%</strong> — FEMA approves the vast majority of requests</li>
-        <li>Average approval time: <strong>30.5 days</strong></li>
-        <li>Average denial time: <strong>61.3 days</strong> — nearly 2× longer</li>
-        <li>Denial processing time has tripled since 2000 (22 days → 84 days in 2025)</li>
-        <li>2020 spike driven almost entirely by COVID-19 Biological declarations</li>
-        <li>FM (Fire Management) fastest at 1.5 days avg; Biological slowest at 62.6 days avg</li>
+        <li><strong>A — Debris Removal:</strong> Clearance of debris created by a disaster</li>
+        <li><strong>B — Emergency Protective Measures:</strong> Actions taken to protect lives and property before, during, and after a disaster</li>
+        <li><strong>C — Roads &amp; Bridges:</strong> Repair or replacement of roads, bridges, and associated features</li>
+        <li><strong>D — Water Control Facilities:</strong> Repair of dams, levees, and drainage channels</li>
+        <li><strong>E — Buildings &amp; Equipment:</strong> Repair of public buildings and equipment</li>
+        <li><strong>F — Utilities:</strong> Repair of water treatment, power, and other utility systems</li>
+        <li><strong>G — Parks, Recreational Facilities &amp; Other Items</strong></li>
+        <li><strong>Z — State Management Costs</strong></li>
+      </ul>
+      <p>Only DR and EM declarations qualify for PA. FM declarations (wildfires) use a separate suppression cost reimbursement program.</p>
+    </div>
+
+    <div class="about-card">
+      <h3>Data Fields &amp; Methodology</h3>
+      <ul>
+        <li><strong>Processing Time:</strong> Measured from Incident Begin Date to Declaration Date for approvals; Request Date to Status Date for denials. Records with negative processing times are excluded as data quality outliers.</li>
+        <li><strong>Unique Disasters:</strong> The raw FEMA data has one row per county designated. This explorer deduplicates to one row per unique disaster event (femaDeclarationString) for all counts and averages.</li>
+        <li><strong>Localities:</strong> County, parish, city, borough, and other designated areas pulled from the raw county-level designation data — not deduplicated, since each locality's designation is meaningful.</li>
+        <li><strong>Presidential Terms:</strong> Assigned by actual declaration date against inauguration dates (Jan 20), not fiscal year — ensuring cross-term years like 2021 and 2025 are correctly split.</li>
+        <li><strong>Denial Rate:</strong> Denials ÷ (Declarations + Denials) × 100. Rates for states with very few requests should be interpreted with caution.</li>
+        <li><strong>PA National Summary:</strong> Represents all obligated PA projects since 2000 — fetched in full from the FEMA API during each weekly refresh.</li>
       </ul>
     </div>
+
     <div class="about-card">
       <h3>Notes &amp; Limitations</h3>
       <ul>
-        <li>Declaration browse shows unique disaster events; county-level designations are collapsed into one row per disaster</li>
-        <li>2026 data is partial and excluded from all analysis</li>
-        <li>Denial records (348) are far fewer than declarations (50,068) — the overall denial rate is less than 1%</li>
-        <li>State denial rates for small states with few requests should be interpreted cautiously</li>
+        <li>2026 data is partial — includes declarations through the most recent API refresh</li>
+        <li>PA financial data reflects obligated amounts, not final expenditures — projects can be adjusted after obligation</li>
+        <li>Denial data is currently unavailable due to a FEMA API endpoint change; this will be restored when the new endpoint is identified</li>
+        <li>FM declarations are counted in total disaster counts but excluded from PA analysis — they use a separate funding program</li>
+        <li>This is a BETA product. Data should be verified against official FEMA sources before use in formal reporting</li>
       </ul>
+      <p style="margin-top:12px;font-size:11px;color:var(--muted)">Last updated: <span id="about-last-updated">—</span></p>
     </div>
+
   </div>
 </div>
 
@@ -980,6 +1004,54 @@ const GRID  = { color: 'rgba(36,53,72,0.8)' };
 const PAL   = ['#2389d7','#4fb3f7','#f0b429','#27ae60','#e74c3c','#9b59b6','#16a085',
                '#e67e22','#3498db','#1abc9c','#e91e63','#ff5722','#607d8b','#795548','#00bcd4'];
 const PG    = 50;
+
+const INCIDENT_COLORS = {
+  // Fire — orange/red
+  'Fire':                '#e67e22',
+  // Storms — blues/teals by intensity
+  'Severe Storm':        '#2389d7',
+  'Hurricane':           '#1a5fa8',
+  'Tropical Storm':      '#4fb3f7',
+  'Tropical Depression': '#7ec8f4',
+  'Typhoon':             '#0d4f8c',
+  'Coastal Storm':       '#5ba3c9',
+  'Thunderstorm Winds':  '#3a8fc2',
+  'Straight-Line Winds': '#6bbdd4',
+  // Winter/Ice — light blue/white-ish
+  'Snowstorm':           '#a8d8ea',
+  'Severe Ice Storm':    '#c5e8f7',
+  'Winter Storm':        '#8ec9e0',
+  'Freezing':            '#b8dff0',
+  // Water — green/teal
+  'Flood':               '#27ae60',
+  'Dam/Levee Break':     '#1e8449',
+  'Tsunami':             '#148f6d',
+  'Mud/Landslide':       '#6d8c3e',
+  // Geological
+  'Earthquake':          '#8e44ad',
+  'Volcanic Eruption':   '#6c3483',
+  // Bio/Chemical
+  'Biological':          '#c0392b',
+  'Chemical':            '#922b21',
+  'Toxic Substances':    '#7b241c',
+  // Wind/Tornado
+  'Tornado':             '#f0b429',
+  // Other
+  'Drought':             '#d4a017',
+  'Terrorist':           '#2c3e50',
+  'Other':               '#7f8c8d',
+};
+
+// Helper: get color for incident type, fall back to gray
+function incColor(type) {
+  return INCIDENT_COLORS[type] || '#7f8c8d';
+}
+
+// Helper: get array of colors for an array of incident types
+function incColors(types) {
+  return types.map(t => incColor(t));
+}
+
 let PA_NATIONAL = {};
 let chartRegistry = {};
 
@@ -1123,7 +1195,7 @@ function initOverview(){
   makeChart('ov-incidents', {
     type:'bar',
     data:{ labels:it.map(r=>r.incidentType),
-      datasets:[{label:'Count',data:it.map(r=>r.count),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}] },
+      datasets:[{label:'Count',data:it.map(r=>r.count),backgroundColor:it.map(r=>incColor(r.incidentType)+'cc'),borderRadius:3}] },
     options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
       scales:{x:{grid:GRID},y:{grid:{display:false}}} }
   });
@@ -1166,7 +1238,7 @@ function initOverview(){
     type: 'bar',
     data: { labels: dbt.map(r=>r.requestedIncidentTypes),
       datasets:[{label:'Denials',data:dbt.map(r=>r.count),
-        backgroundColor:PAL.map(c=>c+'99'),borderColor:PAL,borderWidth:1,borderRadius:2}] },
+        backgroundColor:dbt.map(r=>incColor(r.requestedIncidentTypes)+'99'),borderColor:dbt.map(r=>incColor(r.requestedIncidentTypes)),borderWidth:1,borderRadius:2}] },
     options: { indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
       scales:{ x:{grid:GRID}, y:{grid:{display:false}} } }
   });
@@ -1260,7 +1332,7 @@ function initDeclarations() {
   const it = SUMMARY.byIncidentType.slice(0,10);
   makeChart('dec-incidents', {
     type:'bar',
-    data:{ labels:it.map(r=>r.incidentType), datasets:[{label:'Count',data:it.map(r=>r.count),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}] },
+    data:{ labels:it.map(r=>r.incidentType), datasets:[{label:'Count',data:it.map(r=>r.count),backgroundColor:it.map(r=>incColor(r.incidentType)+'cc'),borderRadius:3}] },
     options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:GRID},y:{grid:{display:false}}} }
   });
 
@@ -1506,7 +1578,7 @@ function selectState(code) {
   if (chartRegistry['state-inc-chart']) chartRegistry['state-inc-chart'].destroy();
   chartRegistry['state-inc-chart'] = new Chart(document.getElementById('state-inc-chart'), {
     type:'bar',
-    data:{ labels:incData.map(r=>r.t), datasets:[{label:'Count',data:incData.map(r=>r.c),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}] },
+    data:{ labels:incData.map(r=>r.t), datasets:[{label:'Count',data:incData.map(r=>r.c),backgroundColor:incData.map(r=>incColor(r.t)+'cc'),borderRadius:3}] },
     options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:GRID},y:{grid:{display:false}}} }
   });
 
@@ -1617,7 +1689,7 @@ function initProcessing() {
   const it = SUMMARY.byIncidentType.slice(0,10).sort((a,b)=>a.avg_days-b.avg_days);
   makeChart('proc-incidents', {
     type:'bar',
-    data:{ labels:it.map(r=>r.incidentType), datasets:[{label:'Avg Days',data:it.map(r=>r.avg_days),backgroundColor:PAL.map(c=>c+'bb'),borderRadius:3}] },
+    data:{ labels:it.map(r=>r.incidentType), datasets:[{label:'Avg Days',data:it.map(r=>r.avg_days),backgroundColor:it.map(r=>incColor(r.incidentType)+'bb'),borderRadius:3}] },
     options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
               scales:{ x:{grid:GRID,title:{display:true,text:'Days'}}, y:{grid:{display:false}} } }
   });
@@ -1740,7 +1812,7 @@ function selectTerm(key) {
       type: 'bar',
       data: {
         labels: inc.map(r => r.type),
-        datasets: [{ label:'Count', data:inc.map(r=>r.count), backgroundColor:PAL.map(c=>c+'cc'), borderRadius:3 }]
+        datasets: [{ label:'Count', data:inc.map(r=>r.count), backgroundColor:inc.map(r=>incColor(r.type)+'cc'), borderRadius:3 }]
       },
       options: { indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
                  scales:{ x:{grid:GRID}, y:{grid:{display:false}} } }
@@ -2531,6 +2603,9 @@ function closePaLocality() {
   document.getElementById('pa-locality-detail').style.display='none';
 }
 
+// Set last updated date in about tab
+const aboutDate = document.getElementById('about-last-updated');
+if (aboutDate && window.DATA_DATE) aboutDate.textContent = window.DATA_DATE;
 initOverview();
 pageInited['overview'] = true;
 </script>
