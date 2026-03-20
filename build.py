@@ -841,14 +841,22 @@ with open("data.js", "w", encoding="utf-8") as f:
 data_kb = len(data_js_content) // 1024
 print(f"  data.js written ({data_kb} KB)")
 
-# Update last-refreshed note in index.html if it exists
+# Update index.html: inject PA_NATIONAL and refresh last-updated stamp
 if os.path.exists("index.html"):
     with open("index.html", encoding="utf-8") as f:
         html = f.read()
+    # Update last-updated stamp
     html = re.sub(r'Last updated:.*?(?=<)', f'Last updated: {TODAY}', html)
+    # Inject PA_NATIONAL directly so embedded HTML shows real numbers
+    pa_json = json.dumps(pa_national, separators=(",",":"))
+    html = re.sub(
+        r'let PA_NATIONAL\s*=\s*\{[^;]*\};',
+        f'let PA_NATIONAL = {pa_json};',
+        html
+    )
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
-    print("  index.html last-updated stamp refreshed")
+    print("  index.html updated with PA_NATIONAL and last-updated stamp")
 
 print(f"\nDone. Data as of {TODAY}.")
 print(f"  Declarations: {len(dec_processed):,}")

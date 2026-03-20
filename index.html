@@ -2603,11 +2603,28 @@ function closePaLocality() {
   document.getElementById('pa-locality-detail').style.display='none';
 }
 
-// Set last updated date in about tab
-const aboutDate = document.getElementById('about-last-updated');
-if (aboutDate && window.DATA_DATE) aboutDate.textContent = window.DATA_DATE;
-initOverview();
-pageInited['overview'] = true;
+// Load PA_NATIONAL from data.js if not already populated
+(function() {
+  if (PA_NATIONAL && PA_NATIONAL.totalObligated) {
+    // Already populated (e.g. from build injection)
+    initBoot();
+    return;
+  }
+  // Try to load data.js to get PA_NATIONAL
+  var s = document.createElement('script');
+  s.src = 'data.js';
+  s.onload = function() { initBoot(); };
+  s.onerror = function() { initBoot(); };
+  document.head.appendChild(s);
+
+  function initBoot() {
+    // Set last updated date in about tab
+    const aboutDate = document.getElementById('about-last-updated');
+    if (aboutDate && window.DATA_DATE) aboutDate.textContent = window.DATA_DATE;
+    initOverview();
+    pageInited['overview'] = true;
+  }
+})();
 </script>
 </body>
 </html>
