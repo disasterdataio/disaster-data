@@ -270,7 +270,7 @@ if raw_pa:
         "A":"Debris Removal","B":"Emergency Protective Measures",
         "C":"Roads & Bridges","D":"Water Control Facilities",
         "E":"Buildings & Equipment","F":"Utilities",
-        "G":"Parks, Recreational, and Other Items","Z":"State Management"
+        "G":"Parks, Recreational, and Other Items","Z":"Management Costs"
     }
 
     for r in raw_pa:
