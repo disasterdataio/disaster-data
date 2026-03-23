@@ -957,7 +957,7 @@ tbody td { padding: 8px 13px; font-size: 12px; color: var(--text); white-space: 
     <span class="ov-section-count" id="hm-bric-count"></span>
   </div>
   <div class="note-box" style="margin-bottom:16px">
-    BRIC supports pre-disaster mitigation activities — not tied to a specific disaster declaration. Encourages investments in critical services, lifeline infrastructure, and community-wide resilience. Replaced the Pre-Disaster Mitigation (PDM) grant program in FY2020.
+    BRIC supports pre-disaster mitigation activities — not tied to a specific disaster declaration. Encourages investments in critical services, lifeline infrastructure, and community-wide resilience. Replaced the Pre-Disaster Mitigation (PDM) grant program in FY2020. <strong style="color:var(--gold)">Note:</strong> FEMA ended the BRIC program in April 2025. Figures here include historical PDM obligations but are sourced from the legacy NEMIS/eGrants system — most FY2020–2023 BRIC awards are recorded in FEMA GO and not reflected in these totals. Actual program obligations are significantly higher.
   </div>
   <div class="kpi-strip" id="hm-bric-kpis" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px"></div>
   <div class="chart-grid-2" style="margin-bottom:18px">
@@ -978,7 +978,7 @@ tbody td { padding: 8px 13px; font-size: 12px; color: var(--text); white-space: 
     <span class="ov-section-count" id="hm-fma-count"></span>
   </div>
   <div class="note-box" style="margin-bottom:16px">
-    FMA provides grants to reduce or eliminate the risk of repetitive flood damage to buildings insured under the National Flood Insurance Program (NFIP). Targets properties with repetitive or severe repetitive loss claims. Federal share is 75–100% of eligible costs for highest-risk properties.
+    FMA provides grants to reduce or eliminate the risk of repetitive flood damage to buildings insured under the National Flood Insurance Program (NFIP). Targets properties with repetitive or severe repetitive loss claims. Federal share is 75–100% of eligible costs for highest-risk properties. <strong style="color:var(--gold)">Note:</strong> Figures here are sourced from the legacy NEMIS/eGrants system and cover pre-FY2020 activity. FY2020+ FMA awards are recorded in FEMA's newer FEMA GO system and are not reflected in these totals — actual program obligations are higher.
   </div>
   <div class="kpi-strip" id="hm-fma-kpis" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px"></div>
   <div class="chart-grid-2" style="margin-bottom:18px">
@@ -989,6 +989,33 @@ tbody td { padding: 8px 13px; font-size: 12px; color: var(--text); white-space: 
     <div class="chart-card">
       <div class="chart-title">FMA Obligations by Project Type</div>
       <canvas id="hm-fma-types" height="240"></canvas>
+    </div>
+  </div>
+
+  <!-- CSV upload fallback (used when proxy is unavailable) -->
+  <div id="hm-upload-zone" style="display:none;margin-top:8px">
+    <div style="background:var(--card);border:2px dashed var(--border);border-radius:var(--radius);padding:28px 24px;text-align:center">
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px">
+        Load HMA Data from CSV
+      </div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.8">
+        Download from FEMA OpenFEMA:<br>
+        <a href="https://www.fema.gov/openfema-data-page/hazard-mitigation-assistance-projects-v4"
+           target="_blank" style="color:var(--sky)">
+          HazardMitigationAssistanceProjects — v4 → Full Data → CSV
+        </a><br>
+        Then drop the file below or click to browse.
+      </div>
+      <label style="cursor:pointer">
+        <input type="file" id="hm-csv-input" accept=".csv" style="display:none" onchange="loadHMFromCSV(this.files[0])">
+        <div style="display:inline-block;background:var(--blue2);color:#fff;font-family:var(--font-mono);
+                    font-size:11px;padding:8px 20px;border-radius:var(--radius);cursor:pointer;
+                    transition:background .15s" onmouseover="this.style.background='var(--sky)';this.style.color='var(--navy)'"
+                    onmouseout="this.style.background='var(--blue2)';this.style.color='#fff'">
+          Choose CSV File
+        </div>
+      </label>
+      <div id="hm-upload-msg" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:12px"></div>
     </div>
   </div>
 
@@ -1142,7 +1169,7 @@ function incColors(types) {
 }
 
 let PA_NATIONAL = {};
-let HM_NATIONAL = {};
+let HM_NATIONAL = {"HMGP":{"totalObligated":15914509608.07,"totalProjects":33710,"subgrantees":9125,"topState":"Louisiana","topStates":[{"state":"Louisiana","obl":2563518802.6},{"state":"New York","obl":2110364822.45},{"state":"Florida","obl":1741251376.15},{"state":"Texas","obl":1597669155.83},{"state":"California","obl":1023407054.04},{"state":"Puerto Rico","obl":716386056.09},{"state":"New Jersey","obl":507890347.74},{"state":"Iowa","obl":482661830.45},{"state":"Mississippi","obl":421450056.79},{"state":"North Carolina","obl":325899602.96},{"state":"Missouri","obl":318122510.2},{"state":"Alabama","obl":242389109.19},{"state":"Kentucky","obl":240313282.54},{"state":"Virgin Islands of the U.S.","obl":228107261.41},{"state":"Oklahoma","obl":204539305.3}],"topTypes":[{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine","obl":1829328663.28},{"type":"206.2: Safe Room (Tornado and Severe Wind Shelter) - Public Structures","obl":1138313727.46},{"type":"700.1: Management Costs - Salaries; \n700.2: Management Costs - Equipment; \n700.3: Management Costs - Office Space Rental; \n700.4: Management Costs - Supplies","obl":716403188.37},{"type":"202.1: Elevation of Private Structures - Riverine; \n202.1A: RETRO - Elevation of Private Structures - Riverine; \n202.2: Elevation of Private Structures - Coastal; \n202.2A: RETRO - Elevation of Private Structures - Coastal; \n207.1: Mitigation Reconstruction - PILOT; \n207.1A: RETRO - Mitigation Reconstruction - PILOT","obl":706670840.86},{"type":"402.1: Infrastructure Protective Measures (Roads and Bridges)","obl":690717946.03},{"type":"601.2: Generators - Regular","obl":657381814.24},{"type":"400.1: Utility Protective Measures (Electric, Gas, etc.)","obl":642458489.44},{"type":"205.8: Retrofitting Public Structures - Wind","obl":583997839.45},{"type":"800.1: Miscellaneous","obl":556613774.76},{"type":"601.1: Generators","obl":463160496.61}]},"BRIC":{"totalObligated":1929824816.57,"totalProjects":8511,"subgrantees":4517,"topState":"California","topStates":[{"state":"California","obl":163020076.81},{"state":"Texas","obl":147481893.76},{"state":"Washington","obl":90724346.87},{"state":"Florida","obl":88521077.42},{"state":"Colorado","obl":75145635.03},{"state":"Massachusetts","obl":66196830.33},{"state":"Missouri","obl":65772623.96},{"state":"New Jersey","obl":62925417.56},{"state":"Illinois","obl":56176534.4},{"state":"Utah","obl":52429229.78},{"state":"Pennsylvania","obl":51983968.98},{"state":"New York","obl":49528990.73},{"state":"Oregon","obl":48700478.55},{"state":"Virginia","obl":45067092.68},{"state":"Georgia","obl":44862436.19}],"topTypes":[{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine","obl":164259986.82},{"type":"206.2: Safe Room (Tornado and Severe Wind Shelter) - Public Structures","obl":144071611.21},{"type":"402.3: Infrastructure Protective Measures","obl":104281052.99},{"type":"205.6: Structural Retrofitting/Rehabilitating Public Structures - Seismic","obl":103873905.89},{"type":"91.1: Local Multihazard Mitigation Plan","obl":94678037.33},{"type":"401.1: Water and Sanitary Sewer System Protective Measures","obl":64395281.21},{"type":"403.4: Stormwater Management - Detention/Retention Basins","obl":62941144.46},{"type":"402.1: Infrastructure Protective Measures (Roads and Bridges)","obl":62548861.42},{"type":"402.4: Community Flood Mitigation Project ","obl":52639446.71},{"type":"601.2: Generators - Regular","obl":49734247.53}]},"FMA":{"totalObligated":1643746624.86,"totalProjects":4866,"subgrantees":1764,"topState":"Louisiana","topStates":[{"state":"Louisiana","obl":502789508.83},{"state":"Texas","obl":356955330.12},{"state":"New Jersey","obl":251342038.2},{"state":"Florida","obl":123721099.98},{"state":"Virginia","obl":54649721.16},{"state":"Kentucky","obl":37191096.91},{"state":"Pennsylvania","obl":36594109.7},{"state":"North Carolina","obl":30546782.03},{"state":"California","obl":25332920.72},{"state":"Oregon","obl":19515056.11},{"state":"Ohio","obl":17444663.58},{"state":"Washington","obl":10814268.85},{"state":"Missouri","obl":10652952.02},{"state":"Arkansas","obl":10589557.63},{"state":"Georgia","obl":10470259.58}],"topTypes":[{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine","obl":497063248.72},{"type":"202.1: Elevation of Private Structures - Riverine","obl":440444665.02},{"type":"202.2: Elevation of Private Structures - Coastal","obl":179640841.84},{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine; \n202.1: Elevation of Private Structures - Riverine","obl":73672461.55},{"type":"202.1: Elevation of Private Structures - Riverine; \n202.2: Elevation of Private Structures - Coastal","obl":63367023.59},{"type":"700.1: Management Costs - Salaries","obl":39722237.9},{"type":"403.4: Stormwater Management - Detention/Retention Basins","obl":38061378.95},{"type":"207.2: Mitigation Reconstruction","obl":34201873.93},{"type":"405.1: Other Minor Flood Control","obl":31236116.66},{"type":"202.1: Elevation of Private Structures - Riverine; \n403.7: Low Impact Development (LID) / Green Infrastructure (GI)","obl":21828010.0}]},"_note":"Built from HazardMitigationAssistanceProjects.xlsx \u2014 PDM/LPDM grouped under BRIC, RFC/SRL grouped under FMA"};
 let chartRegistry = {};
 
 function makeChart(id, config) {
@@ -2391,44 +2418,59 @@ async function loadPaNational() {
     return;
   }
 
-  // Fallback: fetch top 1000 from live API if PA_NATIONAL not available
+  // Fallback: full paginated fetch via proxy (same route used by state drill-downs)
+  // This ensures accurate national totals even when build.py hasn't run yet
   try {
-    const url = PA_API + '?$top=1000&$select=stateAbbreviation,federalShareObligated,totalObligated,damageCategoryCode,damageCategoryDescrip,disasterNumber&$orderby=federalShareObligated%20desc';
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const json = await resp.json();
-    const records = json.PublicAssistanceFundedProjectsDetails || [];
+    kpiEls.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = 'Loading...'; });
+    const filter = "declarationDate ge '2000-01-01T00:00:00.000Z'";
+    const records = await paFetchAll(filter);
     if (!records.length) { kpiEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';}); return; }
 
     const byState={}, byCat={};
-    let totalObl=0, totalProj=0;
+    let totalObl=0, totalProj=0, largest=0;
     const disasters=new Set();
     records.forEach(r=>{
-      const st=r.stateAbbreviation||'Unknown';
-      const obl=parseFloat(r.federalShareObligated)||0;
-      const cat=r.damageCategoryDescrip||DCC_LABELS[r.damageCategoryCode]||'Unknown';
-      byState[st]=byState[st]||{obl:0,proj:0}; byState[st].obl+=obl; byState[st].proj+=1;
-      byCat[cat]=byCat[cat]||{obl:0}; byCat[cat].obl+=obl;
-      totalObl+=obl; totalProj+=1;
-      if(r.disasterNumber) disasters.add(r.disasterNumber);
+      const st  = r.stateAbbreviation||'Unknown';
+      const obl = parseFloat(r.federalShareObligated)||0;
+      const cat = r.damageCategoryDescrip||DCC_LABELS[r.damageCategoryCode]||'Unknown';
+      byState[st] = byState[st]||{obl:0,proj:0};
+      byState[st].obl += obl; byState[st].proj += 1;
+      byCat[cat]   = byCat[cat]||{obl:0};
+      byCat[cat].obl += obl;
+      totalObl += obl; totalProj += 1;
+      if (obl > largest) largest = obl;
+      if (r.disasterNumber) disasters.add(r.disasterNumber);
     });
-    const largest=Math.max(...records.map(r=>parseFloat(r.federalShareObligated)||0));
-    const topState=Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl)[0];
-    const topCat=Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl)[0];
+    const topState = Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl)[0];
+    const topCat   = Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl)[0];
 
     document.getElementById('pa-kpi-total').textContent     = fmtDollar(totalObl);
     document.getElementById('pa-kpi-projects').textContent  = totalProj.toLocaleString();
     document.getElementById('pa-kpi-disasters').textContent = disasters.size.toLocaleString();
     document.getElementById('pa-kpi-avg').textContent       = fmtDollar(largest);
-    document.getElementById('pa-kpi-top-state').textContent = topState?topState[0]:'—';
-    document.getElementById('pa-kpi-top-cat').textContent   = topCat?topCat[0].replace(', and Other Items',''):'—';
+    document.getElementById('pa-kpi-top-state').textContent = topState ? topState[0] : '—';
+    document.getElementById('pa-kpi-top-cat').textContent   = topCat ? topCat[0].replace(', and Other Items','').replace(' / Other','') : '—';
 
-    const statesSorted=Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl).slice(0,15);
-    chartRegistry['pa-states-chart']&&chartRegistry['pa-states-chart'].destroy();
-    chartRegistry['pa-states-chart']=new Chart(document.getElementById('pa-states-chart'),{type:'bar',data:{labels:statesSorted.map(s=>s[0]),datasets:[{label:'Federal Share',data:statesSorted.map(s=>s[1].obl),backgroundColor:PAL,borderRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true,ticks:{callback:v=>'$'+Math.round(v/1e6)+'M'}}}}});
-    const catSorted=Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl).slice(0,8);
-    chartRegistry['pa-cat-chart']&&chartRegistry['pa-cat-chart'].destroy();
-    chartRegistry['pa-cat-chart']=new Chart(document.getElementById('pa-cat-chart'),{type:'bar',data:{labels:catSorted.map(c=>c[0].replace(', and Other Items','')),datasets:[{label:'Federal Share',data:catSorted.map(c=>c[1].obl),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:GRID,ticks:{callback:v=>'$'+Math.round(v/1e6)+'M'}},y:{grid:{display:false}}}}});
+    const statesSorted = Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl).slice(0,15);
+    chartRegistry['pa-states-chart']?.destroy();
+    chartRegistry['pa-states-chart'] = new Chart(document.getElementById('pa-states-chart'), {
+      type:'bar',
+      data:{ labels:statesSorted.map(s=>s[0]),
+        datasets:[{label:'Federal Share',data:statesSorted.map(s=>s[1].obl),backgroundColor:PAL,borderRadius:3}] },
+      options:{ responsive:true, plugins:{legend:{display:false}},
+        scales:{ x:{grid:{display:false}}, y:{grid:GRID,beginAtZero:true,
+          ticks:{callback:v=>'$'+(v>=1e9?(v/1e9).toFixed(1)+'B':Math.round(v/1e6)+'M')}} } }
+    });
+    const catSorted = Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl).slice(0,8);
+    chartRegistry['pa-cat-chart']?.destroy();
+    chartRegistry['pa-cat-chart'] = new Chart(document.getElementById('pa-cat-chart'), {
+      type:'bar',
+      data:{ labels:catSorted.map(c=>c[0].replace(', and Other Items','').replace(' / Other','')),
+        datasets:[{label:'Federal Share',data:catSorted.map(c=>c[1].obl),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}] },
+      options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
+        scales:{ x:{grid:GRID,ticks:{callback:v=>'$'+(v>=1e9?(v/1e9).toFixed(1)+'B':Math.round(v/1e6)+'M')}},
+          y:{grid:{display:false}} } }
+    });
   } catch(e) {
     console.error('PA national load error:', e);
     kpiEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='Error';});
@@ -2761,34 +2803,15 @@ async function initHM() {
     const HM_KEEP = new Set(['HMGP', 'BRIC', 'FMA']);
     const programs = { HMGP: [], BRIC: [], FMA: [] };
 
-    async function hmFetchPage(baseUrl, skip) {
-      const url = `${baseUrl}&$skip=${skip}`;
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      return resp.json();
-    }
-
-    // Build base URLs for proxy and direct
     const paramStr = `$top=10000&$select=${encodeURIComponent(HM_FIELDS)}&$inlinecount=allpages`;
     const proxyBase  = `${HM_PROXY}?${paramStr}`;
-    const directBase = `${HM_API}?${paramStr}`;
-
-    // Probe proxy with first page; on failure silently switch to direct
-    let useBase = proxyBase;
-    try {
-      const probe = await fetch(`${proxyBase}&$skip=0`);
-      if (!probe.ok) useBase = directBase;
-    } catch(e) {
-      useBase = directBase;
-    }
-
-    statusEl.textContent = useBase === directBase
-      ? 'Loading hazard mitigation data from FEMA API (direct)…'
-      : 'Loading hazard mitigation data via proxy…';
 
     let skip = 0, total = null;
     while (true) {
-      const json  = await hmFetchPage(useBase, skip);
+      const url  = `${proxyBase}&$skip=${skip}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json  = await resp.json();
       const batch = json.HazardMitigationAssistanceProjects || [];
       if (total === null) total = parseInt(json.metadata?.count || 0);
 
@@ -2806,10 +2829,83 @@ async function initHM() {
 
   } catch(e) {
     console.error('HM load error:', e);
-    statusEl.style.display  = 'block';
-    statusEl.style.color    = 'var(--red2)';
-    statusEl.textContent    = `Error loading hazard mitigation data: ${e.message}`;
+    statusEl.style.display = 'none';
+    // Show CSV upload fallback
+    document.getElementById('hm-upload-zone').style.display = 'block';
+    document.getElementById('hm-upload-msg').textContent =
+      `Proxy unavailable (${e.message}). Load a CSV file to populate charts.`;
   }
+}
+
+function loadHMFromCSV(file) {
+  if (!file) return;
+  const msgEl = document.getElementById('hm-upload-msg');
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = 'Parsing CSV…';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const lines  = e.target.result.split(/\r?\n/);
+      const header = lines[0].split(',').map(h => h.replace(/"/g,'').trim());
+
+      // Map column names to indices (case-insensitive, handle quoted headers)
+      const col = name => {
+        const i = header.findIndex(h => h.toLowerCase() === name.toLowerCase());
+        return i >= 0 ? i : null;
+      };
+      const iProgram  = col('programArea');
+      const iState    = col('state');
+      const iFedShare = col('federalShareObligated');
+      const iType     = col('typeOfProject');
+      const iSub      = col('subrecipient');
+
+      if (iProgram === null || iState === null || iFedShare === null) {
+        throw new Error('Required columns not found. Expected: programArea, state, federalShareObligated');
+      }
+
+      const HM_KEEP = new Set(['HMGP', 'BRIC', 'FMA']);
+      const programs = { HMGP: [], BRIC: [], FMA: [] };
+      let rowCount = 0;
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        // Handle quoted CSV fields
+        const fields = [];
+        let inQuote = false, cur = '';
+        for (const ch of line + ',') {
+          if (ch === '"') { inQuote = !inQuote; }
+          else if (ch === ',' && !inQuote) { fields.push(cur.trim()); cur = ''; }
+          else { cur += ch; }
+        }
+
+        const prog = (fields[iProgram] || '').trim().toUpperCase();
+        if (!HM_KEEP.has(prog)) continue;
+
+        programs[prog].push({
+          state:                 fields[iState]    || 'Unknown',
+          federalShareObligated: fields[iFedShare] || '0',
+          typeOfProject:         iType !== null ? (fields[iType] || 'Other') : 'Other',
+          subrecipient:          iSub  !== null ? (fields[iSub]  || '')      : '',
+        });
+        rowCount++;
+      }
+
+      msgEl.style.color = 'var(--green)';
+      msgEl.textContent = `Loaded ${rowCount.toLocaleString()} records — HMGP: ${programs.HMGP.length.toLocaleString()}, BRIC: ${programs.BRIC.length.toLocaleString()}, FMA: ${programs.FMA.length.toLocaleString()}`;
+
+      document.getElementById('hm-upload-zone').style.display = 'none';
+      renderHMData(hmAgg(programs.HMGP), hmAgg(programs.BRIC), hmAgg(programs.FMA));
+
+    } catch(err) {
+      msgEl.style.color = 'var(--red2)';
+      msgEl.textContent = 'Error parsing CSV: ' + err.message;
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
 }
 
 function renderHMData(hmgp, bric, fma) {
