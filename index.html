@@ -1087,7 +1087,7 @@ tbody td { padding: 8px 13px; font-size: 12px; color: var(--text); white-space: 
         <li>FM declarations are counted in total disaster counts but excluded from PA analysis — they use a separate funding program</li>
         <li>This is a BETA product. Data should be verified against official FEMA sources before use in formal reporting</li>
       </ul>
-      <p style="margin-top:12px;font-size:11px;color:var(--muted)">Last updated: 2026-03-23<span id="about-last-updated">March 21, 2026</span></p>
+      <p style="margin-top:12px;font-size:11px;color:var(--muted)">Last updated: <span id="about-last-updated">March 21, 2026</span></p>
     </div>
 
   </div>
@@ -1168,8 +1168,8 @@ function incColors(types) {
   return types.map(t => incColor(t));
 }
 
-let PA_NATIONAL = {"totalObligated":276853884617.7,"totalProjects":784942,"totalDisasters":1707,"largestProject":8156161559.68,"topState":"NY","topCategory":"Emergency Protective Measures","topStates":[{"state":"NY","obl":40933107591.88,"proj":56034},{"state":"PR","obl":39735481460.37,"proj":21852},{"state":"LA","obl":26024764620.59,"proj":39070},{"state":"CA","obl":23351537325.16,"proj":25149},{"state":"TX","obl":22495590580.02,"proj":46737},{"state":"VI","obl":22292532612.98,"proj":1866},{"state":"FL","obl":20949633054.69,"proj":68118},{"state":"NJ","obl":6389488565.36,"proj":24225},{"state":"NC","obl":5418942142.91,"proj":17427},{"state":"MS","obl":4290988720.37,"proj":17115},{"state":"MA","obl":4052864453.17,"proj":14966},{"state":"WA","obl":3698651868.47,"proj":11907},{"state":"GA","obl":3418476216.24,"proj":11831},{"state":"MD","obl":2875990645.65,"proj":7560},{"state":"OR","obl":2736255165.08,"proj":6306}],"topCategories":[{"cat":"Emergency Protective Measures","obl":125252382329.44,"proj":211812},{"cat":"Utilities","obl":40595928959.93,"proj":44137},{"cat":"Buildings and Equipment","obl":39818190174.23,"proj":98953},{"cat":"Debris Removal","obl":24287130724.47,"proj":84213},{"cat":"Roads and Bridges","obl":19798378755.24,"proj":247847},{"cat":"Management Costs","obl":9568414198.46,"proj":17925},{"cat":"Parks, Recreational Facilities, and Other Items","obl":8044900801.06,"proj":45039},{"cat":"Direct Administrative Costs","obl":4364482466.13,"proj":7863},{"cat":"Water Control Facilities","obl":3054288529.64,"proj":13612},{"cat":"Section 324 Management Costs","obl":1878717476.64,"proj":2499},{"cat":"Emergency Work Donated Resources","obl":190726806.27,"proj":11036},{"cat":"Building Code Management and Enforcement","obl":343396.16,"proj":6}]};
-let HM_NATIONAL = {};
+let PA_NATIONAL = {};
+let HM_NATIONAL = {"HMGP":{"totalObligated":15914509608.07,"totalProjects":33710,"subgrantees":9125,"topState":"Louisiana","topStates":[{"state":"Louisiana","obl":2563518802.6},{"state":"New York","obl":2110364822.45},{"state":"Florida","obl":1741251376.15},{"state":"Texas","obl":1597669155.83},{"state":"California","obl":1023407054.04},{"state":"Puerto Rico","obl":716386056.09},{"state":"New Jersey","obl":507890347.74},{"state":"Iowa","obl":482661830.45},{"state":"Mississippi","obl":421450056.79},{"state":"North Carolina","obl":325899602.96},{"state":"Missouri","obl":318122510.2},{"state":"Alabama","obl":242389109.19},{"state":"Kentucky","obl":240313282.54},{"state":"Virgin Islands of the U.S.","obl":228107261.41},{"state":"Oklahoma","obl":204539305.3}],"topTypes":[{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine","obl":1829328663.28},{"type":"206.2: Safe Room (Tornado and Severe Wind Shelter) - Public Structures","obl":1138313727.46},{"type":"700.1: Management Costs - Salaries; \n700.2: Management Costs - Equipment; \n700.3: Management Costs - Office Space Rental; \n700.4: Management Costs - Supplies","obl":716403188.37},{"type":"202.1: Elevation of Private Structures - Riverine; \n202.1A: RETRO - Elevation of Private Structures - Riverine; \n202.2: Elevation of Private Structures - Coastal; \n202.2A: RETRO - Elevation of Private Structures - Coastal; \n207.1: Mitigation Reconstruction - PILOT; \n207.1A: RETRO - Mitigation Reconstruction - PILOT","obl":706670840.86},{"type":"402.1: Infrastructure Protective Measures (Roads and Bridges)","obl":690717946.03},{"type":"601.2: Generators - Regular","obl":657381814.24},{"type":"400.1: Utility Protective Measures (Electric, Gas, etc.)","obl":642458489.44},{"type":"205.8: Retrofitting Public Structures - Wind","obl":583997839.45},{"type":"800.1: Miscellaneous","obl":556613774.76},{"type":"601.1: Generators","obl":463160496.61}]},"BRIC":{"totalObligated":1929824816.57,"totalProjects":8511,"subgrantees":4517,"topState":"California","topStates":[{"state":"California","obl":163020076.81},{"state":"Texas","obl":147481893.76},{"state":"Washington","obl":90724346.87},{"state":"Florida","obl":88521077.42},{"state":"Colorado","obl":75145635.03},{"state":"Massachusetts","obl":66196830.33},{"state":"Missouri","obl":65772623.96},{"state":"New Jersey","obl":62925417.56},{"state":"Illinois","obl":56176534.4},{"state":"Utah","obl":52429229.78},{"state":"Pennsylvania","obl":51983968.98},{"state":"New York","obl":49528990.73},{"state":"Oregon","obl":48700478.55},{"state":"Virginia","obl":45067092.68},{"state":"Georgia","obl":44862436.19}],"topTypes":[{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine","obl":164259986.82},{"type":"206.2: Safe Room (Tornado and Severe Wind Shelter) - Public Structures","obl":144071611.21},{"type":"402.3: Infrastructure Protective Measures","obl":104281052.99},{"type":"205.6: Structural Retrofitting/Rehabilitating Public Structures - Seismic","obl":103873905.89},{"type":"91.1: Local Multihazard Mitigation Plan","obl":94678037.33},{"type":"401.1: Water and Sanitary Sewer System Protective Measures","obl":64395281.21},{"type":"403.4: Stormwater Management - Detention/Retention Basins","obl":62941144.46},{"type":"402.1: Infrastructure Protective Measures (Roads and Bridges)","obl":62548861.42},{"type":"402.4: Community Flood Mitigation Project ","obl":52639446.71},{"type":"601.2: Generators - Regular","obl":49734247.53}]},"FMA":{"totalObligated":1643746624.86,"totalProjects":4866,"subgrantees":1764,"topState":"Louisiana","topStates":[{"state":"Louisiana","obl":502789508.83},{"state":"Texas","obl":356955330.12},{"state":"New Jersey","obl":251342038.2},{"state":"Florida","obl":123721099.98},{"state":"Virginia","obl":54649721.16},{"state":"Kentucky","obl":37191096.91},{"state":"Pennsylvania","obl":36594109.7},{"state":"North Carolina","obl":30546782.03},{"state":"California","obl":25332920.72},{"state":"Oregon","obl":19515056.11},{"state":"Ohio","obl":17444663.58},{"state":"Washington","obl":10814268.85},{"state":"Missouri","obl":10652952.02},{"state":"Arkansas","obl":10589557.63},{"state":"Georgia","obl":10470259.58}],"topTypes":[{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine","obl":497063248.72},{"type":"202.1: Elevation of Private Structures - Riverine","obl":440444665.02},{"type":"202.2: Elevation of Private Structures - Coastal","obl":179640841.84},{"type":"200.1: Acquisition of Private Real Property (Structures and Land) - Riverine; \n202.1: Elevation of Private Structures - Riverine","obl":73672461.55},{"type":"202.1: Elevation of Private Structures - Riverine; \n202.2: Elevation of Private Structures - Coastal","obl":63367023.59},{"type":"700.1: Management Costs - Salaries","obl":39722237.9},{"type":"403.4: Stormwater Management - Detention/Retention Basins","obl":38061378.95},{"type":"207.2: Mitigation Reconstruction","obl":34201873.93},{"type":"405.1: Other Minor Flood Control","obl":31236116.66},{"type":"202.1: Elevation of Private Structures - Riverine; \n403.7: Low Impact Development (LID) / Green Infrastructure (GI)","obl":21828010.0}]},"_note":"Built from HazardMitigationAssistanceProjects.xlsx \u2014 PDM/LPDM grouped under BRIC, RFC/SRL grouped under FMA"};
 let chartRegistry = {};
 
 function makeChart(id, config) {
@@ -2418,63 +2418,8 @@ async function loadPaNational() {
     return;
   }
 
-  // Fallback: full paginated fetch via proxy (same route used by state drill-downs)
-  // This ensures accurate national totals even when build.py hasn't run yet
-  try {
-    kpiEls.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = 'Loading...'; });
-    const filter = "declarationDate ge '2000-01-01T00:00:00.000Z'";
-    const records = await paFetchAll(filter);
-    if (!records.length) { kpiEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';}); return; }
-
-    const byState={}, byCat={};
-    let totalObl=0, totalProj=0, largest=0;
-    const disasters=new Set();
-    records.forEach(r=>{
-      const st  = r.stateAbbreviation||'Unknown';
-      const obl = parseFloat(r.federalShareObligated)||0;
-      const cat = r.damageCategoryDescrip||DCC_LABELS[r.damageCategoryCode]||'Unknown';
-      byState[st] = byState[st]||{obl:0,proj:0};
-      byState[st].obl += obl; byState[st].proj += 1;
-      byCat[cat]   = byCat[cat]||{obl:0};
-      byCat[cat].obl += obl;
-      totalObl += obl; totalProj += 1;
-      if (obl > largest) largest = obl;
-      if (r.disasterNumber) disasters.add(r.disasterNumber);
-    });
-    const topState = Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl)[0];
-    const topCat   = Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl)[0];
-
-    document.getElementById('pa-kpi-total').textContent     = fmtDollar(totalObl);
-    document.getElementById('pa-kpi-projects').textContent  = totalProj.toLocaleString();
-    document.getElementById('pa-kpi-disasters').textContent = disasters.size.toLocaleString();
-    document.getElementById('pa-kpi-avg').textContent       = fmtDollar(largest);
-    document.getElementById('pa-kpi-top-state').textContent = topState ? topState[0] : '—';
-    document.getElementById('pa-kpi-top-cat').textContent   = topCat ? topCat[0].replace(', and Other Items','').replace(' / Other','') : '—';
-
-    const statesSorted = Object.entries(byState).sort((a,b)=>b[1].obl-a[1].obl).slice(0,15);
-    chartRegistry['pa-states-chart']?.destroy();
-    chartRegistry['pa-states-chart'] = new Chart(document.getElementById('pa-states-chart'), {
-      type:'bar',
-      data:{ labels:statesSorted.map(s=>s[0]),
-        datasets:[{label:'Federal Share',data:statesSorted.map(s=>s[1].obl),backgroundColor:PAL,borderRadius:3}] },
-      options:{ responsive:true, plugins:{legend:{display:false}},
-        scales:{ x:{grid:{display:false}}, y:{grid:GRID,beginAtZero:true,
-          ticks:{callback:v=>'$'+(v>=1e9?(v/1e9).toFixed(1)+'B':Math.round(v/1e6)+'M')}} } }
-    });
-    const catSorted = Object.entries(byCat).sort((a,b)=>b[1].obl-a[1].obl).slice(0,8);
-    chartRegistry['pa-cat-chart']?.destroy();
-    chartRegistry['pa-cat-chart'] = new Chart(document.getElementById('pa-cat-chart'), {
-      type:'bar',
-      data:{ labels:catSorted.map(c=>c[0].replace(', and Other Items','').replace(' / Other','')),
-        datasets:[{label:'Federal Share',data:catSorted.map(c=>c[1].obl),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:3}] },
-      options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
-        scales:{ x:{grid:GRID,ticks:{callback:v=>'$'+(v>=1e9?(v/1e9).toFixed(1)+'B':Math.round(v/1e6)+'M')}},
-          y:{grid:{display:false}} } }
-    });
-  } catch(e) {
-    console.error('PA national load error:', e);
-    kpiEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='Error';});
-  }
+  // No pre-built data available — show dashes until build.py runs successfully
+  kpiEls.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '—'; });
 }
 
 

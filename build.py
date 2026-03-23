@@ -979,13 +979,14 @@ if os.path.exists("index.html"):
     # Inject PA_NATIONAL and HM_NATIONAL using line-based replacement
     # (regex approach breaks when JSON contains semicolons in string values)
     pa_json = json.dumps(pa_national, separators=(",",":"))
-    hm_json = json.dumps(hm_national, separators=(",",":"))
+    # Only inject HM_NATIONAL if we have real data — never overwrite baked-in data with {}
+    hm_json = json.dumps(hm_national, separators=(",",":")) if hm_national else None
     lines_out = []
     for line in html.splitlines(keepends=True):
         stripped = line.strip()
         if stripped.startswith('let PA_NATIONAL') and stripped.endswith(';'):
             line = f'let PA_NATIONAL = {pa_json};\n'
-        elif stripped.startswith('let HM_NATIONAL') and stripped.endswith(';'):
+        elif stripped.startswith('let HM_NATIONAL') and stripped.endswith(';') and hm_json:
             line = f'let HM_NATIONAL = {hm_json};\n'
         lines_out.append(line)
     html = ''.join(lines_out)
